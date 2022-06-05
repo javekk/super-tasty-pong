@@ -1,0 +1,7 @@
+
+
+// the configured options and settings for Tutorial
+#define stpong_VERSION_MAJOR @stpong_VERSION_MAJOR@
+#define stpong_VERSION_MINOR @stpong_VERSION_MINOR@
+#define stpong_VERSION_PATCH @stpong_VERSION_PATCH@
+

@@ -1,0 +1,16 @@
+[submodule "stpong/vendor/glad"]
+	path = stpong/vendor/glad
+	url = https://github.com/Dav1dde/glad.git
+	branch = c
+[submodule "stpong/vendor/glfw"]
+	path = stpong/vendor/glfw
+	url = https://github.com/glfw/glfw.git
+	branch = master
+[submodule "stpong/vendor/glm"]
+	path = stpong/vendor/glm
+	url = https://github.com/g-truc/glm.git
+	branch = master
+[submodule "stpong/vendor/stb"]
+	path = stpong/vendor/stb
+	url = https://github.com/nothings/stb.git
+	branch = master
