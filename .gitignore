@@ -50,3 +50,6 @@ CTestTestfile.cmake
 _deps
 .vscode/c_cpp_properties.json
 .vscode/settings.json
+
+#VSCODE
+.vscode
