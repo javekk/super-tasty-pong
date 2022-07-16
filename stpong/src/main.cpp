@@ -5,9 +5,9 @@
 #include <GLFW/glfw3.h>
 
 #include "stpong/src/stpongConfig.hpp"
-#include "window/windowSettings.hpp"
+#include "window/window.hpp"
 
-void framebufferSizeCallback(GLFWwindow *window, int width, int height);
+
 void processInput(GLFWwindow *window);
 
 const char *vertexShaderSource =
@@ -32,31 +32,7 @@ int main(int argc, char *argv[]){
               << stpong_VERSION_MAJOR << "." << stpong_VERSION_MINOR << "." << stpong_VERSION_PATCH
               << std::endl;
 
-    // glfw: Init and config
-    glfwInit();
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-#ifdef __APPLE__
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-#endif
-
-    // glfw: Window Creation
-    GLFWwindow *window = glfwCreateWindow(windowWidth, windowHeight, windowTitle.c_str(), NULL, NULL);
-    if (window == NULL){
-        std::cout << "Failed to create GLFW window" << std::endl;
-        glfwTerminate();
-        return -1;
-    }
-    glfwMakeContextCurrent(window);
-    glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
-
-    // glad: Load all OpenGl function pointers
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)){
-        std::cout << "Failed to initialize GLAD" << std::endl;
-        return -1;
-    }
+    GLFWwindow* window = initialise();
 
     // shader and vertex
     unsigned int vertexShader;
@@ -83,7 +59,7 @@ int main(int argc, char *argv[]){
     float vertices[] = {
         -0.9f, -0.5f, 0.0f, // left
         -0.0f, -0.5f, 0.0f, // right
-        -0.45f, 0.5f, 0.0f, // top
+        -0.35f, 0.5f, 0.0f, // top
     };
 
     unsigned int VBO, VAO;
@@ -123,8 +99,4 @@ int main(int argc, char *argv[]){
 void processInput(GLFWwindow *window){
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
-}
-
-void framebufferSizeCallback(GLFWwindow *window, int width, int height){
-    glViewport(0, 0, width, height);
 }
