@@ -92,6 +92,7 @@ file(
         ${STPONG_SHADERS_DIR}/*.frag
         ${STPONG_SHADERS_DIR}/*.geom
         ${STPONG_SHADERS_DIR}/*.vert
+        ${STPONG_SHADERS_DIR}/*.glsl
 )
 file(
     GLOB STPONG_CONFIGS 
