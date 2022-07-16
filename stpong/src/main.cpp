@@ -1,5 +1,8 @@
 // A simple program that computes the square root of a number
 #include <iostream>
+#include <string>
+#include <fstream>
+
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -9,22 +12,8 @@
 
 
 void processInput(GLFWwindow *window);
+std::string readFile(const char *filePath); 
 
-const char *vertexShaderSource =
-    "#version 330 core\n"
-    "layout (location = 0) in vec3 aPos;\n"
-    "void main()\n"
-    "{\n"
-    "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-    "}\0";
-
-const char *fragmentShaderSource =
-    "#version 330 core\n"
-    "out vec4 FragColor;\n"
-    "void main()\n"
-    "{\n"
-    "   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-    "}\n\0";
 
 int main(int argc, char *argv[]){
 
@@ -34,15 +23,20 @@ int main(int argc, char *argv[]){
 
     GLFWwindow* window = initialise();
 
+    std::string vertShaderStr = readFile("shader/simplestvert.glsl");
+    std::string fragShaderStr = readFile("shader/simplestfrag.glsl");
+    const char *vertShaderSrc = vertShaderStr.c_str();
+    const char *fragShaderSrc = fragShaderStr.c_str();
+
     // shader and vertex
     unsigned int vertexShader;
     vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
+    glShaderSource(vertexShader, 1, &vertShaderSrc, NULL);
     glCompileShader(vertexShader);
 
     unsigned int fragmentShader;
     fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
+    glShaderSource(fragmentShader, 1, &fragShaderSrc, NULL);
     glCompileShader(fragmentShader);
 
     // create shader program obj to link shaders
@@ -99,4 +93,29 @@ int main(int argc, char *argv[]){
 void processInput(GLFWwindow *window){
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
+}
+
+
+std::string readFile(const char *filePath) {
+
+    std::string classPath =  __FILE__;
+    std::string rootPath = classPath.substr(0, classPath.find("src/main.cpp"));
+    std::string absPath = rootPath + filePath;
+
+    std::string content;
+    std::ifstream fileStream(absPath, std::ios::in);
+    
+    if(!fileStream.is_open()) {
+        std::cerr << "Could not read file " << absPath << ". File does not exist." << std::endl;
+        return "";
+    }
+
+    std::string line = "";
+    while(!fileStream.eof()) {
+        std::getline(fileStream, line);
+        content.append(line + "\n");
+    }
+
+    fileStream.close();
+    return content;
 }
