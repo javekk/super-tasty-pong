@@ -17,9 +17,11 @@ void runProgram(GLFWwindow* window){
 
     // Load shader from file as String
     std::string vertShaderStr = readFile("shader/simplestvert.glsl");
-    std::string fragShaderStr = readFile("shader/simplestfrag.glsl");
+    std::string oFragShaderStr = readFile("shader/simplestfragorange.glsl");
+    std::string yFragShaderStr = readFile("shader/simplestfragyellow.glsl");
     const char *vertShaderSrc = vertShaderStr.c_str();
-    const char *fragShaderSrc = fragShaderStr.c_str();
+    const char *oFragShaderSrc = oFragShaderStr.c_str();
+    const char *yFragShaderSrc = yFragShaderStr.c_str();
 
 
     // Shader compilation errors utils
@@ -38,27 +40,47 @@ void runProgram(GLFWwindow* window){
         std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
     }
 
-    unsigned int fragmentShader;
-    fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragmentShader, 1, &fragShaderSrc, NULL);
-    glCompileShader(fragmentShader);
+    unsigned int oFragmentShader;
+    oFragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(oFragmentShader, 1, &oFragShaderSrc, NULL);
+    glCompileShader(oFragmentShader);
     // Check for frag shader compilation error
-    glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
+    glGetShaderiv(oFragmentShader, GL_COMPILE_STATUS, &success);
     if (!success){
-        glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
+        glGetShaderInfoLog(oFragmentShader, 512, NULL, infoLog);
+        std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
+    }
+
+    unsigned int yFragmentShader;
+    yFragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(yFragmentShader, 1, &yFragShaderSrc, NULL);
+    glCompileShader(yFragmentShader);
+    // Check for frag shader compilation error
+    glGetShaderiv(yFragmentShader, GL_COMPILE_STATUS, &success);
+    if (!success){
+        glGetShaderInfoLog(yFragmentShader, 512, NULL, infoLog);
         std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
     }
 
     // create shader program obj to link shaders
-    unsigned int shaderProgram;
-    shaderProgram = glCreateProgram();
+    unsigned int oShaderProgram;
+    oShaderProgram = glCreateProgram();
 
-    glAttachShader(shaderProgram, vertexShader);
-    glAttachShader(shaderProgram, fragmentShader);
-    glLinkProgram(shaderProgram);
+    glAttachShader(oShaderProgram, vertexShader);
+    glAttachShader(oShaderProgram, oFragmentShader);
+    glLinkProgram(oShaderProgram);
+
+    unsigned int yShaderProgram;
+    yShaderProgram = glCreateProgram();
+
+    glAttachShader(yShaderProgram, vertexShader);
+    glAttachShader(yShaderProgram, yFragmentShader);
+    glLinkProgram(yShaderProgram);
+
 
     glDeleteShader(vertexShader);
-    glDeleteShader(fragmentShader);
+    glDeleteShader(oFragmentShader);
+    glDeleteShader(yFragmentShader);
 
     float lVertices[] = {
         -0.1f,  0.5f, 0.0f,  // top right
@@ -106,6 +128,10 @@ void runProgram(GLFWwindow* window){
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
     glEnableVertexAttribArray(0);
 
+
+    // uncomment this call to draw in wireframe polygons.
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
     // render loop
     while (!glfwWindowShouldClose(window)){
 
@@ -116,11 +142,12 @@ void runProgram(GLFWwindow* window){
         glClear(GL_COLOR_BUFFER_BIT);
 
         // draw
-        glUseProgram(shaderProgram);
-
+        glUseProgram(oShaderProgram);
         glBindVertexArray(VAOs[0]);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
+
+        glUseProgram(yShaderProgram);
         glBindVertexArray(VAOs[1]);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         
