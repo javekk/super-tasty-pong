@@ -1,4 +1,5 @@
 #include <string>
+#include <iostream>
 
 #include "program.hpp"
 #include "util/util.hpp"
@@ -20,15 +21,33 @@ void runProgram(GLFWwindow* window){
     const char *vertShaderSrc = vertShaderStr.c_str();
     const char *fragShaderSrc = fragShaderStr.c_str();
 
+
+    // Shader compilation errors utils
+    int success;
+    char infoLog[512];
+
+
     unsigned int vertexShader;
     vertexShader = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertexShader, 1, &vertShaderSrc, NULL);
     glCompileShader(vertexShader);
+    // Check for vert shader compilation error
+    glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
+    if (!success){
+        glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
+        std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
+    }
 
     unsigned int fragmentShader;
     fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(fragmentShader, 1, &fragShaderSrc, NULL);
     glCompileShader(fragmentShader);
+    // Check for frag shader compilation error
+    glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
+    if (!success){
+        glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
+        std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
+    }
 
     // create shader program obj to link shaders
     unsigned int shaderProgram;
@@ -47,7 +66,7 @@ void runProgram(GLFWwindow* window){
         -0.35f, 0.5f, 0.0f, // top
     };
 
-    unsigned int VBO, VAO;
+    unsigned int VBO, VAO; // Vertex Buffer Objects, Vertex Array Object
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
 

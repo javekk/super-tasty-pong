@@ -11,7 +11,7 @@
 
 int main(int argc, char *argv[]){
 
-    std::cout << "Super Tasty Pong "
+    std::cout << "Super Tasty Pong" 
               << stpong_VERSION_MAJOR << "." << stpong_VERSION_MINOR << "." << stpong_VERSION_PATCH
               << std::endl;
 
@@ -20,6 +20,7 @@ int main(int argc, char *argv[]){
     runProgram(window);
 
     glfwTerminate();
+    
     return EXIT_SUCCESS;
 }
 
