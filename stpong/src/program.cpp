@@ -61,9 +61,14 @@ void runProgram(GLFWwindow* window){
     glDeleteShader(fragmentShader);
 
     float vertices[] = {
-        -0.9f, -0.5f, 0.0f, // left
-        -0.0f, -0.5f, 0.0f, // right
-        -0.35f, 0.5f, 0.0f, // top
+        // first triangle
+        0.5f,  0.5f, 0.0f,  // top right
+        0.5f, -0.5f, 0.0f,  // bottom right
+        -0.5f,  0.5f, 0.0f,  // top left 
+        // second triangle
+        0.5f, -0.5f, 0.0f,  // bottom right
+        -0.5f, -0.5f, 0.0f,  // bottom left
+        -0.5f,  0.5f, 0.0f   // top left
     };
 
     unsigned int VBO, VAO; // Vertex Buffer Objects, Vertex Array Object
@@ -90,7 +95,7 @@ void runProgram(GLFWwindow* window){
         // draw
         glUseProgram(shaderProgram);
         glBindVertexArray(VAO);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
