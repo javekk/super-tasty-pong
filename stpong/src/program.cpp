@@ -1,5 +1,6 @@
 #include <string>
 #include <iostream>
+#include <cmath>
 
 #include "program.hpp"
 #include "util/util.hpp"
@@ -145,6 +146,13 @@ void runProgram(GLFWwindow* window){
         glUseProgram(oShaderProgram);
         glBindVertexArray(VAOs[0]);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+
+        float timeValue = glfwGetTime();
+        float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
+        int vertexColorLocation = glGetUniformLocation(oShaderProgram, "ourColor");
+        glUseProgram(oShaderProgram);
+        glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
 
 
         glUseProgram(yShaderProgram);

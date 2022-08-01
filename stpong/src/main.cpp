@@ -18,7 +18,7 @@ int main(int argc, char *argv[]){
     GLFWwindow* window = initialise();
 
     runProgram(window);
-
+    
     glfwTerminate();
     
     return EXIT_SUCCESS;
