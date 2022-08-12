@@ -65,6 +65,9 @@ void runProgram(GLFWwindow* window){
         glClear(GL_COLOR_BUFFER_BIT);
 
         // draw
+        float timeValue = glfwGetTime();
+        float offset = (sin(timeValue) / 2.0f) + 0.25f;
+        mShader.setFloat("xOffset", offset);
         mShader.use();
         glBindVertexArray(VAOs[0]);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
