@@ -1,4 +1,6 @@
 #include "Shader.hpp"
+#include "util/util.hpp"
+
 
 Shader::Shader(const char* vertexPath, const char* fragmentPath){
         
@@ -6,25 +8,9 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath){
     std::string vertexCode;
     std::string fragmentCode;
     std::ifstream vShaderFile;
-    std::ifstream fShaderFile;
-
-    // ensure ifstream objects can throw exceptions:
-    vShaderFile.exceptions (std::ifstream::failbit | std::ifstream::badbit);
-    fShaderFile.exceptions (std::ifstream::failbit | std::ifstream::badbit);
     try {
-        // open files
-        vShaderFile.open(getAbsPath(vertexPath));
-        fShaderFile.open(getAbsPath(fragmentPath));
-        std::stringstream vShaderStream, fShaderStream;
-        // read file's buffer contents into streams
-        vShaderStream << vShaderFile.rdbuf();
-        fShaderStream << fShaderFile.rdbuf();
-        // close file handlers
-        vShaderFile.close();
-        fShaderFile.close();
-        // convert stream into string
-        vertexCode = vShaderStream.str();
-        fragmentCode = fShaderStream.str();
+        vertexCode = readFile(vertexPath);
+        fragmentCode = readFile(fragmentPath);
     }
     catch (std::ifstream::failure& e) {
         std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ: " << e.what() << std::endl;
@@ -91,12 +77,4 @@ void Shader::checkCompileErrors(unsigned int shader, std::string type) {
             std::cout << "ERROR::PROGRAM_LINKING_ERROR of type: " << type << "\n" << infoLog << "\n -- --------------------------------------------------- -- " << std::endl;
         }
     }
-}
-
-const char* Shader::getAbsPath(const char* path){
-    std::string classPath =  __FILE__;
-    std::string rootPath = classPath.substr(0, classPath.find("src/shader/Shader.cpp"));
-    std::string absPath = rootPath + "shader/" + path;
-    std::cout << absPath.c_str() << std::endl;
-    return absPath.c_str();
 }

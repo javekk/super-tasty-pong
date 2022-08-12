@@ -3,12 +3,14 @@
 #include <fstream>
 
 #include "util.hpp"
+#include "stpong/src/stpongConfig.hpp"
 
 std::string readFile(const char *filePath) {
 
     std::string classPath =  __FILE__;
-    std::string rootPath = classPath.substr(0, classPath.find("src/util/util.cpp"));
-    std::string absPath = rootPath + filePath;
+    std::string rootPath = classPath.substr(0, classPath.find("stpong/src/util/util.cpp"));
+    std::string absPath = rootPath + stpong_SHADERS_DIR + "/" + filePath;
+    std::cout << absPath << std::endl;
 
     std::string content;
     std::ifstream fileStream(absPath, std::ios::in);

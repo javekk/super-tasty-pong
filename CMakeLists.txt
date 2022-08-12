@@ -19,7 +19,7 @@ set(
 )
 set(
     STPONG_SHADERS_DIR
-    ${STPONG_ROOT_DIR}/shaders
+    ${STPONG_ROOT_DIR}/shader
 )
 
 # specify the C++ standard
@@ -107,7 +107,6 @@ configure_file(
     ${STPONG_SOURCE_DIR}/stpongConfig.hpp.in 
     ${STPONG_SOURCE_DIR}/stpongConfig.hpp
 )
-
 
 
 source_group ("headers" FILES ${STPONG_HEADERS})

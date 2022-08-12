@@ -24,9 +24,8 @@ class Shader {
         void setFloat(const std::string &name, float value) const;
 
     private:
-    // utility function for checking shader compilation/linking errors.
+        // utility function for checking shader compilation/linking errors.
         void checkCompileErrors(unsigned int shader, std::string type);
-        const char* getAbsPath(const char* path);
 };
 
 
