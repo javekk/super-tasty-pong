@@ -21,6 +21,10 @@ set(
     STPONG_SHADERS_DIR
     ${STPONG_ROOT_DIR}/shader
 )
+set(
+    STPONG_ASSETS_DIR
+    ${STPONG_ROOT_DIR}/assets
+)
 
 # specify the C++ standard
 set(

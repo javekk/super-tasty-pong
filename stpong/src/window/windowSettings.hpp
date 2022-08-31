@@ -1,6 +1,6 @@
 // Preprocessor directives
-#ifndef WINDOW_SETTING_HPP
-#define WINDOW_SETTING_HPP
+#ifndef WINDOW_SETTINGS_HPP
+#define WINDOW_SETTINGS_HPP
 #pragma once
 
 // System Headers

@@ -7,4 +7,6 @@
 
 std::string readFile(const char *filePath); 
 
+unsigned int loadTexture(const char *imgPath);
+
 #endif

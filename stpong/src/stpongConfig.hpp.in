@@ -3,4 +3,4 @@
 #define stpong_VERSION_PATCH @stpong_VERSION_PATCH@
 
 #define stpong_SHADERS_DIR "@STPONG_SHADERS_DIR@"
-
+#define stpong_ASSETS_DIR "@STPONG_ASSETS_DIR@"
