@@ -11,6 +11,12 @@
 #include "stb_image.h"
 
 
+std::string getExt(std::string imgPath);
+
+int getChannels(std::string imgPath);
+
+
+
 std::string readFile(const char *filePath) {
 
     std::string classPath =  __FILE__;
@@ -56,7 +62,7 @@ unsigned int loadTexture(const char *imgPath){
     int width, height, nrChannels;
     unsigned char *data = stbi_load(absPath.c_str(), &width, &height, &nrChannels, 0);
     if (data){
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, getChannels(imgPath), GL_UNSIGNED_BYTE, data);
         glGenerateMipmap(GL_TEXTURE_2D);
     }
     else{
@@ -66,3 +72,34 @@ unsigned int loadTexture(const char *imgPath){
     stbi_image_free(data);
     return texture;
 }
+
+
+std::string toUpperCase(std::string str){
+    std::string result = "";
+    int length = str.length();
+    for (int i = 0; i < length; i++) 
+        result += toupper(str[i]);
+    return result;
+}
+
+
+// Private methods
+
+std::string getExt(std::string imgPath) {
+    return toUpperCase(imgPath.substr(imgPath.find_last_of('.')));
+}
+
+int getChannels(std::string imgPath){
+    std::string ext = getExt(imgPath);
+    std::cout << ext << std::endl;
+    if(ext.compare(".PNG") == 0)
+        return GL_RGBA;
+    else // .jpg
+        return GL_RGB;
+}   
+
+
+
+
+
+

@@ -55,7 +55,12 @@ void runProgram(GLFWwindow* window){
     glEnableVertexAttribArray(2);
 
     // get texture
-    unsigned int texture = loadTexture("wall.jpg");
+    unsigned int wallTexture = loadTexture("wall.jpg");
+    unsigned int awesomeTexture = loadTexture("awesomeface.png");
+
+    mShader.use(); 
+    mShader.setInt("texture1", 0); 
+    mShader.setInt("texture2", 1); 
 
     // uncomment this call to draw in wireframe polygons.
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -69,12 +74,21 @@ void runProgram(GLFWwindow* window){
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
+        // bind textures on corresponding texture units
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, wallTexture);
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, awesomeTexture);
+
         // draw
         float timeValue = glfwGetTime();
         float offset = (sin(timeValue) / 3.5f);
         mShader.setFloat("xOffset", offset);
         mShader.use();
-        glBindTexture(GL_TEXTURE_2D, texture);
+
+        glBindTexture(GL_TEXTURE_2D, wallTexture);
+        glBindTexture(GL_TEXTURE_2D, awesomeTexture);
+
         glBindVertexArray(VAOs[0]);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
