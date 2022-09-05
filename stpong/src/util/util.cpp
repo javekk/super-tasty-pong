@@ -2,7 +2,6 @@
 #include <string>
 #include <fstream>
 
-#include <glad/glad.h> 
 
 #include "util.hpp"
 #include "settings.hpp"
@@ -42,15 +41,18 @@ std::string readFile(const char *filePath) {
 }
 
 
-unsigned int loadTexture(const char *imgPath){
+unsigned int loadTexture(
+    const char *imgPath,
+    GLint wrappingMethod
+){
 
     unsigned int texture;
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture);
 
     // set the texture wrapping/filtering options (on the currently bound texture object)
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrappingMethod);	
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrappingMethod);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
@@ -89,7 +91,7 @@ std::string getExt(std::string imgPath) {
     return toUpperCase(imgPath.substr(imgPath.find_last_of('.')));
 }
 
-int getChannels(std::string imgPath){
+GLint getChannels(std::string imgPath){
     std::string ext = getExt(imgPath);
     if(ext.compare(".PNG") == 0)
         return GL_RGBA;

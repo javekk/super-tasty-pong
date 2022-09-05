@@ -22,10 +22,10 @@ void runProgram(GLFWwindow* window){
 
     float vertices[] = {
         // positions          // colors           // texture coords
-         0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f, // top right
-         0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f, // bottom right
+         0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   2.0f, 2.0f, // top right
+         0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   2.0f, 0.0f, // bottom right
         -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f, // bottom left
-        -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f  // top left 
+        -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 2.0f  // top left 
     };
     unsigned int indices[] = {
         0, 1, 3, // first triangle
@@ -56,7 +56,7 @@ void runProgram(GLFWwindow* window){
 
     // get texture
     unsigned int wallTexture = loadTexture("wall.jpg");
-    unsigned int awesomeTexture = loadTexture("awesomeface.png");
+    unsigned int awesomeTexture = loadTexture("awesomeface.png", GL_MIRRORED_REPEAT);
 
     mShader.use(); 
     mShader.setInt("texture1", 0); 
