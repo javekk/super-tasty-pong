@@ -7,6 +7,12 @@
 #include "shader/Shader.hpp"
 
 
+
+float getYOffset(float previousYOffset, GLFWwindow *window);
+float getXOffset(float previousXOffset, GLFWwindow *window);
+void handleEscButton(GLFWwindow *window);
+
+
 void processInput(GLFWwindow *window){
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
@@ -55,8 +61,8 @@ void runProgram(GLFWwindow* window){
     glEnableVertexAttribArray(2);
 
     // get texture
-    unsigned int wallTexture = loadTexture("wall.jpg");
-    unsigned int awesomeTexture = loadTexture("awesomeface.png", GL_MIRRORED_REPEAT);
+    unsigned int wallTexture = loadTexture("wall.jpg", GL_REPEAT, GL_NEAREST);
+    unsigned int awesomeTexture = loadTexture("awesomeface.png", GL_MIRRORED_REPEAT, GL_NEAREST);
 
     mShader.use(); 
     mShader.setInt("texture1", 0); 
@@ -66,8 +72,11 @@ void runProgram(GLFWwindow* window){
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     // render loop
+    float xOffset = 0.0;
+    float yOffset = 0.0;
     while (!glfwWindowShouldClose(window)){
 
+        handleEscButton(window);
         processInput(window);
 
         // render
@@ -81,10 +90,11 @@ void runProgram(GLFWwindow* window){
         glBindTexture(GL_TEXTURE_2D, awesomeTexture);
 
         // draw
-        float timeValue = glfwGetTime();
-        float offset = (sin(timeValue) / 3.5f);
-        mShader.setFloat("xOffset", offset);
+        mShader.setFloat("xOffset", xOffset);
+        mShader.setFloat("yOffset", yOffset);
         mShader.use();
+        xOffset = getXOffset(xOffset, window);
+        yOffset = getYOffset(yOffset, window);
 
         glBindTexture(GL_TEXTURE_2D, wallTexture);
         glBindTexture(GL_TEXTURE_2D, awesomeTexture);
@@ -97,4 +107,50 @@ void runProgram(GLFWwindow* window){
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
+
+    // De-allocate all resources 
+    glDeleteVertexArrays(1, VAOs);
+    glDeleteBuffers(1, VBOs);
+    glDeleteBuffers(1, EBOs);
+}
+
+
+void handleEscButton(GLFWwindow *window){
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, true);
+}
+
+float getYOffset(float previousYOffset, GLFWwindow *window) {
+
+    float yOffset = previousYOffset; 
+    
+    if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS){
+        yOffset += 0.01f; 
+        if(yOffset >= 1.0f)
+            yOffset = 1.0f;
+    }
+    if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS){
+        yOffset -= 0.01f; 
+        if (yOffset <= -1.0f)
+            yOffset = -1.0f;
+    }
+    return yOffset;
+}
+
+
+float getXOffset(float previousXOffset, GLFWwindow *window) {
+
+    float xOffset = previousXOffset; 
+
+    if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS){
+        xOffset += 0.01f; 
+        if(xOffset >= 1.0f)
+            xOffset = 1.0f;
+    }
+    if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS){
+        xOffset -= 0.01f; 
+        if (xOffset <= -1.0f)
+            xOffset = -1.0f;
+    }
+    return xOffset;
 }

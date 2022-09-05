@@ -9,7 +9,8 @@ std::string readFile(const char *filePath);
 
 unsigned int loadTexture(
     const char *imgPath,
-    GLint wrappingMethod = GL_REPEAT
+    GLint wrappingMethod = GL_REPEAT,
+    GLint filteringMethod = GL_LINEAR
 );
 
 std::string toUpperCase(std::string str); 

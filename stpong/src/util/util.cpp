@@ -11,7 +11,6 @@
 
 
 std::string getExt(std::string imgPath);
-
 int getChannels(std::string imgPath);
 
 
@@ -43,7 +42,8 @@ std::string readFile(const char *filePath) {
 
 unsigned int loadTexture(
     const char *imgPath,
-    GLint wrappingMethod
+    GLint wrappingMethod,
+    GLint filteringMethod
 ){
 
     unsigned int texture;
@@ -53,8 +53,8 @@ unsigned int loadTexture(
     // set the texture wrapping/filtering options (on the currently bound texture object)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrappingMethod);	
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrappingMethod);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filteringMethod);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filteringMethod);
 
     // load and generate the texture
     std::string classPath =  __FILE__;
