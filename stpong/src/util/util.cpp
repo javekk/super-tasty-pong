@@ -91,7 +91,6 @@ std::string getExt(std::string imgPath) {
 
 int getChannels(std::string imgPath){
     std::string ext = getExt(imgPath);
-    std::cout << ext << std::endl;
     if(ext.compare(".PNG") == 0)
         return GL_RGBA;
     else // .jpg
