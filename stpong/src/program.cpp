@@ -3,9 +3,8 @@
 #include <cmath>
 
 #include "program.hpp"
-#include "util/util.hpp"
-#include "shader/Shader.hpp"
-
+#include "IO/shader/Shader.hpp"
+#include "IO/texture/texture.hpp"
 
 
 float getYOffset(float previousYOffset, GLFWwindow *window);

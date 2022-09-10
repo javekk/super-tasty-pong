@@ -4,7 +4,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#include "window/window.hpp"
+#include "IO/window/window.hpp"
 #include "program.hpp"
 
 #include "settings.hpp"

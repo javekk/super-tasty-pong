@@ -1,10 +1,9 @@
 #include <iostream>
-#include <string>
 #include <fstream>
 
-
-#include "util.hpp"
+#include "texture.hpp"
 #include "settings.hpp"
+#include "service/string/string.hpp"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
@@ -12,32 +11,6 @@
 
 std::string getExt(std::string imgPath);
 int getChannels(std::string imgPath);
-
-
-
-std::string readFile(const char *filePath) {
-
-    std::string classPath =  __FILE__;
-    std::string rootPath = classPath.substr(0, classPath.find("stpong/src/util/util.cpp"));
-    std::string absPath = rootPath + SHADERS_DIR + "/" + filePath;
-
-    std::string content;
-    std::ifstream fileStream(absPath, std::ios::in);
-    
-    if(!fileStream.is_open()) {
-        std::cerr << "Could not read file " << absPath << ". File does not exist." << std::endl;
-        return "";
-    }
-
-    std::string line = "";
-    while(!fileStream.eof()) {
-        std::getline(fileStream, line);
-        content.append(line + "\n");
-    }
-
-    fileStream.close();
-    return content;
-}
 
 
 unsigned int loadTexture(
@@ -58,7 +31,7 @@ unsigned int loadTexture(
 
     // load and generate the texture
     std::string classPath =  __FILE__;
-    std::string rootPath = classPath.substr(0, classPath.find("stpong/src/util/util.cpp"));
+    std::string rootPath = classPath.substr(0, classPath.find("stpong/src/IO/texture/texture.cpp"));
     std::string absPath = rootPath + ASSETS_DIR + "/" + imgPath;
 
     int width, height, nrChannels;
@@ -73,15 +46,6 @@ unsigned int loadTexture(
     }
     stbi_image_free(data);
     return texture;
-}
-
-
-std::string toUpperCase(std::string str){
-    std::string result = "";
-    int length = str.length();
-    for (int i = 0; i < length; i++) 
-        result += toupper(str[i]);
-    return result;
 }
 
 
