@@ -2,6 +2,10 @@
 #include <iostream>
 #include <cmath>
 
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 #include "program.hpp"
 #include "IO/shader/Shader.hpp"
 #include "IO/texture/texture.hpp"
@@ -9,6 +13,9 @@
 
 float getYOffset(float previousYOffset, GLFWwindow *window);
 float getXOffset(float previousXOffset, GLFWwindow *window);
+float getSize(float previousSizeTransformation, GLFWwindow *window);
+
+glm::mat4 getTransformationMatrix(float size, float xOffset, float yOffset);
 void handleEscButton(GLFWwindow *window);
 
 
@@ -73,6 +80,7 @@ void runProgram(GLFWwindow* window){
     // render loop
     float xOffset = 0.0;
     float yOffset = 0.0;
+    float size = 1.0;
     while (!glfwWindowShouldClose(window)){
 
         handleEscButton(window);
@@ -89,11 +97,14 @@ void runProgram(GLFWwindow* window){
         glBindTexture(GL_TEXTURE_2D, awesomeTexture);
 
         // draw
-        mShader.setFloat("xOffset", xOffset);
-        mShader.setFloat("yOffset", yOffset);
+        glm::mat4 transform = getTransformationMatrix(size, xOffset, yOffset);
         mShader.use();
+        unsigned int transformLoc = glGetUniformLocation(mShader.ID, "transform");
+        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
+
         xOffset = getXOffset(xOffset, window);
         yOffset = getYOffset(yOffset, window);
+        size = getSize(size, window);
 
         glBindTexture(GL_TEXTURE_2D, wallTexture);
         glBindTexture(GL_TEXTURE_2D, awesomeTexture);
@@ -152,4 +163,29 @@ float getXOffset(float previousXOffset, GLFWwindow *window) {
             xOffset = -1.0f;
     }
     return xOffset;
+}
+
+
+float getSize(float previousSizeTransformation, GLFWwindow *window){
+
+    float newSizeTransformation = previousSizeTransformation;
+    if (glfwGetKey(window, GLFW_KEY_KP_ADD) == GLFW_PRESS){
+        newSizeTransformation += 0.01f; 
+        if(newSizeTransformation >= 2.0f)
+            newSizeTransformation = 2.0f;
+    }
+    if (glfwGetKey(window, GLFW_KEY_KP_SUBTRACT) == GLFW_PRESS){
+        newSizeTransformation -= 0.01f; 
+        if (newSizeTransformation <= 0.1f)
+            newSizeTransformation = 0.1f;
+    }
+    return newSizeTransformation;
+}
+
+
+glm::mat4 getTransformationMatrix(float size, float xOffset, float yOffset){
+    glm::mat4 transform = glm::mat4(1.0f); 
+    transform = glm::scale(transform, glm::vec3(size));
+    transform = glm::translate(transform, glm::vec3(xOffset, yOffset, 0.0f));
+    return transform;
 }
