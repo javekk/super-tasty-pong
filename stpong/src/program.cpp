@@ -13,9 +13,10 @@
 
 float getYOffset(float previousYOffset, GLFWwindow *window);
 float getXOffset(float previousXOffset, GLFWwindow *window);
-float getSize(float previousSizeTransformation, GLFWwindow *window);
+float getSize(float previousSize, GLFWwindow *window);
+float getRotation(float previousRotation, GLFWwindow *window);
 
-glm::mat4 getTransformationMatrix(float size, float xOffset, float yOffset);
+glm::mat4 getTransformationMatrix(float xOffset, float yOffset, float size, float rotation);
 void handleEscButton(GLFWwindow *window);
 
 
@@ -81,6 +82,7 @@ void runProgram(GLFWwindow* window){
     float xOffset = 0.0;
     float yOffset = 0.0;
     float size = 1.0;
+    float rotationDegree = 0.0;
     while (!glfwWindowShouldClose(window)){
 
         handleEscButton(window);
@@ -97,7 +99,7 @@ void runProgram(GLFWwindow* window){
         glBindTexture(GL_TEXTURE_2D, awesomeTexture);
 
         // draw
-        glm::mat4 transform = getTransformationMatrix(size, xOffset, yOffset);
+        glm::mat4 transform = getTransformationMatrix(xOffset, yOffset, size, rotationDegree);
         mShader.use();
         unsigned int transformLoc = glGetUniformLocation(mShader.ID, "transform");
         glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
@@ -105,6 +107,7 @@ void runProgram(GLFWwindow* window){
         xOffset = getXOffset(xOffset, window);
         yOffset = getYOffset(yOffset, window);
         size = getSize(size, window);
+        rotationDegree = getRotation(rotationDegree, window);
 
         glBindTexture(GL_TEXTURE_2D, wallTexture);
         glBindTexture(GL_TEXTURE_2D, awesomeTexture);
@@ -166,26 +169,44 @@ float getXOffset(float previousXOffset, GLFWwindow *window) {
 }
 
 
-float getSize(float previousSizeTransformation, GLFWwindow *window){
+float getSize(float previousSize, GLFWwindow *window){
 
-    float newSizeTransformation = previousSizeTransformation;
+    float newSize = previousSize;
     if (glfwGetKey(window, GLFW_KEY_KP_ADD) == GLFW_PRESS){
-        newSizeTransformation += 0.01f; 
-        if(newSizeTransformation >= 2.0f)
-            newSizeTransformation = 2.0f;
+        newSize += 0.01f; 
+        if(newSize >= 2.0f)
+            newSize = 2.0f;
     }
     if (glfwGetKey(window, GLFW_KEY_KP_SUBTRACT) == GLFW_PRESS){
-        newSizeTransformation -= 0.01f; 
-        if (newSizeTransformation <= 0.1f)
-            newSizeTransformation = 0.1f;
+        newSize -= 0.01f; 
+        if (newSize <= 0.1f)
+            newSize = 0.1f;
     }
-    return newSizeTransformation;
+    return newSize;
+}
+
+float getRotation(float previousRotation, GLFWwindow *window){
+
+    float newRotation = previousRotation;
+    if (glfwGetKey(window, GLFW_KEY_N) == GLFW_PRESS)
+        newRotation += 1.0f;
+    if (glfwGetKey(window, GLFW_KEY_M) == GLFW_PRESS)
+        newRotation -= 1.0f; 
+    if (newRotation >= 360.0f)
+        newRotation = 0.0f;
+    return newRotation;
 }
 
 
-glm::mat4 getTransformationMatrix(float size, float xOffset, float yOffset){
+glm::mat4 getTransformationMatrix(
+    float xOffset, 
+    float yOffset, 
+    float size, 
+    float rotation
+){
     glm::mat4 transform = glm::mat4(1.0f); 
     transform = glm::scale(transform, glm::vec3(size));
+    transform = glm::rotate(transform, glm::radians(rotation), glm::vec3(0.0, 0.0, 1.0));
     transform = glm::translate(transform, glm::vec3(xOffset, yOffset, 0.0f));
     return transform;
 }
