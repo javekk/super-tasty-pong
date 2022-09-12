@@ -14,6 +14,7 @@ int main(int argc, char *argv[]){
 
     std::cout << "Super Tasty Pong v" 
               << VERSION_MAJOR << "." << VERSION_MINOR << "." << VERSION_PATCH
+              << ".❤️"
               << std::endl;
 
     GLFWwindow* window = initialise();

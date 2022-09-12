@@ -13,7 +13,6 @@ std::string readFile(const char *filePath) {
 
     std::string content;
     std::ifstream fileStream(absPath, std::ios::in);
-    
     if(!fileStream.is_open()) {
         std::cerr << "Could not read file " << absPath << ". File does not exist." << std::endl;
         return "";
