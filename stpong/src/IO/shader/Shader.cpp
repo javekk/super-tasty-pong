@@ -10,13 +10,13 @@ Shader::Shader(
     , const char *fragmentPath
     , const char *geometryPath
 ){
-
     unsigned int vertex, fragment, gShader;
 
     vertex = this->loadSingleShader(vertexPath, GL_VERTEX_SHADER, "VERTEX");
     fragment = this->loadSingleShader(fragmentPath, GL_FRAGMENT_SHADER, "FRAGMENT");
-    if (geometryPath != nullptr) 
-        gShader = this->loadSingleShader(geometryPath, GL_GEOMETRY_SHADER, "GEOMETRY");
+    gShader = (geometryPath != nullptr) 
+        ? this->loadSingleShader(geometryPath, GL_GEOMETRY_SHADER, "GEOMETRY") 
+        : 0;
     
     this->ID = glCreateProgram();
     glAttachShader(ID, vertex);
@@ -96,7 +96,7 @@ unsigned int Shader::loadSingleShader(
     , std::string type
 ){  
     unsigned int shader = glCreateShader(shaderType);
-    std::string sShaderCode = readFile(path);
+    std::string sShaderCode = readShader(path);
     const char *shaderCode = sShaderCode.c_str();
     glShaderSource(shader, 1, &shaderCode, NULL);
     glCompileShader(shader);

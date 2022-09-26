@@ -6,7 +6,7 @@
 
 #include "program.hpp"
 #include "IO/shader/Shader.hpp"
-#include "IO/texture/texture.hpp"
+#include "IO/texture/Texture.hpp"
 #include "IO/transformation/Transformations.hpp"
 
 
@@ -56,8 +56,11 @@ void runProgram(GLFWwindow* window){
     glEnableVertexAttribArray(2);
 
     // get texture
-    unsigned int wallTexture = loadTexture("wall.jpg", GL_REPEAT, GL_NEAREST);
-    unsigned int awesomeTexture = loadTexture("awesomeface.png", GL_MIRRORED_REPEAT, GL_NEAREST);
+    Texture wallTexture; 
+    wallTexture.generate("wall.jpg");
+
+    Texture awesomeTexture;
+    awesomeTexture.generate("awesomeface.png");
 
     mShader.use(); 
     mShader.setInt("texture1", 0); 
@@ -84,9 +87,9 @@ void runProgram(GLFWwindow* window){
 
         // bind textures on corresponding texture units
         glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, wallTexture);
+        glBindTexture(GL_TEXTURE_2D, wallTexture.ID);
         glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, awesomeTexture);
+        glBindTexture(GL_TEXTURE_2D, awesomeTexture.ID);
 
         // draw
         glm::mat4 transform = transformations.getTransformationMatrix(transformations);
@@ -95,9 +98,6 @@ void runProgram(GLFWwindow* window){
         glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
 
         transformations = Transformations(transformations, window);
-
-        glBindTexture(GL_TEXTURE_2D, wallTexture);
-        glBindTexture(GL_TEXTURE_2D, awesomeTexture);
 
         glBindVertexArray(VAOs[0]);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
