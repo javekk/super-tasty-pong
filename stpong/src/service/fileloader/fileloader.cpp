@@ -31,8 +31,8 @@ std::string readShader(const char *filePath) {
 }
 
 
-std::tuple<int, int, unsigned char*> readTexture(const char *filePath){
-    std::tuple<int, int, unsigned char*> ret;
+ReadTexture readTexture(const char *filePath){
+    ReadTexture texture;
     std::string classPath =  __FILE__;
     std::string rootPath = classPath.substr(0, classPath.find("stpong/src/service/fileloader/fileloader.cpp"));
     std::string absPath = rootPath + ASSETS_DIR + "/" + filePath;
@@ -43,10 +43,10 @@ std::tuple<int, int, unsigned char*> readTexture(const char *filePath){
         std::cerr << "Failed to load texture: could not read file " 
                   << absPath << ". File does not exist." << std::endl;
     }
-    std::get<0>(ret) = width;
-    std::get<1>(ret) = height;
-    std::get<2>(ret) = data;
-    return ret;
+    texture.width = width;
+    texture.height = height;
+    texture.data = data;
+    return texture;
 }
 
 void freeTexture(unsigned char *data){

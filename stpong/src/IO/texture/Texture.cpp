@@ -19,7 +19,6 @@ GLint getChannels(std::string imgPath){
         return GL_RGB;
 }   
 
-
 Texture::Texture(): 
     width(0)
     , height(0)
@@ -47,11 +46,10 @@ Texture Texture::generate(
     this->minFilter = filteringMethod;
     this->maxFilter = filteringMethod; 
 
-    // width, height, data TODO(use a class)
-    std::tuple<int, int, unsigned char*> rawTexture = readTexture(imgPath.c_str());
-    this->width = std::get<0>(rawTexture);
-    this->height = std::get<1>(rawTexture);
-    this->data = std::get<2>(rawTexture);
+    ReadTexture rawTexture = readTexture(imgPath.c_str());
+    this->width = rawTexture.width;
+    this->height = rawTexture.height;
+    this->data = rawTexture.data;
 
     this->imageFormat = getChannels(imgPath);
 
