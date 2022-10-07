@@ -4,6 +4,7 @@
 
 #include <glad/glad.h> 
 
+Shader::Shader() {}
 
 Shader::Shader(
     const char *vertexPath

@@ -3,7 +3,6 @@
 #pragma once
 
 #include <string>
-#include <tuple>
 
 std::string readShader(const char *filePath); 
 

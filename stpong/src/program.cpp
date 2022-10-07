@@ -5,8 +5,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "program.hpp"
-#include "IO/shader/Shader.hpp"
-#include "IO/texture/Texture.hpp"
+#include "service/resource/ResourceService.hpp"
 #include "IO/transformation/Transformations.hpp"
 
 
@@ -17,9 +16,6 @@ void handleEscButton(GLFWwindow *window){
 
 
 void runProgram(GLFWwindow* window){
-
-    // Load shader from file
-    Shader mShader("simplestvert.glsl", "simplestfrag.glsl");
 
     float vertices[] = {
         // positions          // colors           // texture coords
@@ -55,14 +51,11 @@ void runProgram(GLFWwindow* window){
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
     glEnableVertexAttribArray(2);
 
-    // get texture
-    Texture wallTexture; 
-    wallTexture.generate("wall.jpg");
-
-    Texture awesomeTexture;
-    awesomeTexture.generate("awesomeface.png");
-
-    mShader.use(); 
+    // get textures
+    Texture wallTexture = ResourceService::loadTexture("wall.jpg", "wall");
+    Texture awesomeTexture = ResourceService::loadTexture("awesomeface.png", "face");
+    // Load shader 
+    Shader mShader =  ResourceService::loadShader("simplestvert.glsl", "simplestfrag.glsl", nullptr, "mShader");
     mShader.setInt("texture1", 0); 
     mShader.setInt("texture2", 1); 
 
