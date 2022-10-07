@@ -5,24 +5,25 @@
 #include <GLFW/glfw3.h>
 
 #include "IO/window/window.hpp"
-#include "program.hpp"
+#include "IO/window/windowSettings.hpp"
+#include "Program.hpp"
 
 #include "settings.hpp"
-
+#include "game/Game.hpp"
 
 int main(int argc, char *argv[]){
 
-    std::cout << "Super Tasty Pong v" 
+    std::cout << "Super Tasty Pong v"
               << VERSION_MAJOR << "." << VERSION_MINOR << "." << VERSION_PATCH
               << ".❤️"
               << std::endl;
 
-    GLFWwindow* window = initialise();
+    GLFWwindow *window = initialise();
+    Game superTastyPong(windowWidth, windowHeight);
+    Program program(window, superTastyPong);
+    program.run();
 
-    runProgram(window);
-    
     glfwTerminate();
-    
+
     return EXIT_SUCCESS;
 }
-

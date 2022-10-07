@@ -14,9 +14,9 @@ enum GameState {
 class Game{
     public:
 
-        GameState    State;	
-        bool         Keys[1024];
-        unsigned int Width, Height;
+        GameState    state;	
+        bool         keys[1024];
+        unsigned int width, height;
 
         Game(unsigned int width, unsigned int height);
         ~Game();
@@ -24,8 +24,8 @@ class Game{
         void init();
 
         // Game loop
-        void processInput(float dt);
-        void update(float dt);
+        void processInput(float deltaTime);
+        void update(float deltaTime);
         void render();
 };
 
