@@ -4,6 +4,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#include "IO/sprite/SpriteRenderer.hpp"
 
 enum GameState {
     GAME_ACTIVE,
@@ -27,6 +28,9 @@ class Game{
         void processInput(float deltaTime);
         void update(float deltaTime);
         void render();
+    
+    private:
+        SpriteRenderer *renderer;
 };
 
 #endif
