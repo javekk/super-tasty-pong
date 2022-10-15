@@ -13,12 +13,11 @@ Program::Program(GLFWwindow* window, Game game):
 
 int Program::run(){
 
-    // https://stackoverflow.com/a/62972123
     auto keyCallback = [](GLFWwindow* window, int key, int scancode, int action, int mods) {
         auto me = (Program*) glfwGetWindowUserPointer(window);
-        me->keyCallback( window, key, scancode, action, mods);
+        me->keyCallback(window, key, scancode, action, mods);
     };
-    glfwSetWindowUserPointer( window, this );
+    glfwSetWindowUserPointer(window, this);
     glfwSetKeyCallback(window, keyCallback);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
