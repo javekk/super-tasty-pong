@@ -38,8 +38,8 @@ class Game{
     
     private:
         SpriteRenderer *renderer;
-        GameObject *rPaddle;
         GameObject *lPaddle;
+        GameObject *rPaddle;
 };
 
 #endif
