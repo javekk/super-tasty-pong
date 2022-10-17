@@ -8,8 +8,7 @@ GameObject::GameObject():
     , velocity(0.0f)
     , color(1.0f)
     , rotation(0.0f)
-    , sprite()
-    , isSolid(false) { }
+    , sprite(){ }
 
 
 GameObject::GameObject(
@@ -24,8 +23,7 @@ GameObject::GameObject(
     , velocity(velocity)
     , color(color)
     , rotation(0.0f)
-    , sprite(sprite)
-    , isSolid(false) { }
+    , sprite(sprite) { }
 
 
 void GameObject::draw(SpriteRenderer &renderer){

@@ -59,9 +59,22 @@ void Game::init(){
         , this->height / 2.0f - PADDLE_SIZE.y / 2.0f
     );
     this->rPaddle = new GameObject(rPaddlePos, PADDLE_SIZE, lPaddleTexture);
+
+    glm::vec2 ballPos = glm::vec2(
+        this-> width / 2.0f
+        , this->height / 2.0f
+    );
+    ResourceService::loadTexture("awesomeface.png", "face");
+    this->ball = new Ball(
+        ballPos, 
+        BALL_RADIUS, 
+        INITIAL_BALL_VELOCITY,
+        ResourceService::getTexture("face")
+    );
 }
 
 void Game::update(float deltaTime){
+    this->ball->move(deltaTime, this->height);
 }
 
 void Game::processInput(float deltaTime){
@@ -87,6 +100,10 @@ void Game::processInput(float deltaTime){
             if (this->rPaddle->position.y <= (this->height - this->rPaddle->size.y))
                 this->rPaddle->position.y += velocity;
         }
+
+        // Ball
+        if (this->keys[GLFW_KEY_SPACE])
+            this->ball->stuck = false;
     }
 }
 
@@ -101,4 +118,5 @@ void Game::render(){
 
     this->lPaddle->draw(*this->renderer);
     this->rPaddle->draw(*this->renderer);
+    this->ball->draw(*this->renderer);
 }
