@@ -21,7 +21,7 @@ const float PADDLE_VELOCITY(500.0f);
 const float PADDLE_WALL_DISTANCE(PADDLE_SIZE.x + 5.0f);
 
 const float BALL_RADIUS = 12.5f;
-const float BALL_VELOCITY_MAGNITUDE = 500;
+const float BALL_VELOCITY_MAGNITUDE = 100;
 
 class Game{
 
@@ -47,7 +47,7 @@ class Game{
         GameObject *rPaddle;
         Ball *ball;
 
-        bool isCollision(GameObject &goa, GameObject &gob);
+        bool isCollision(Ball &ball, GameObject &paddle);
 };
 
 #endif

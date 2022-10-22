@@ -11,4 +11,5 @@ int assignRandomSign(int value);
 
 glm::vec2 getInitialVelocity(int magnitude);
 
+
 #endif

@@ -29,9 +29,9 @@ glm::vec2 Ball::move(float deltatime, unsigned int windowHeight){
             this->velocity.y = -this->velocity.y;
             this->position.y = 0.0f;
         }
-        else if (this->position.y >= (windowHeight - this->radius)) {
+        else if (this->position.y >= (windowHeight - this->radius*2)) {
             this->velocity.y = -this->velocity.y;
-            this->position.y = windowHeight - this->radius;
+            this->position.y = windowHeight - this->radius*2;
         }
     }
     return this->position;

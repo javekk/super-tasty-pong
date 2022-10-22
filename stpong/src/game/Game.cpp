@@ -69,7 +69,6 @@ void Game::init(){
     );
     ResourceService::loadTexture("awesomeface.png", "face");
 
-    const glm::vec2 PADDLE_SIZE(-250.0f, -433.0f);
     this->ball = new Ball(
         ballPos, 
         BALL_RADIUS, 
@@ -130,20 +129,26 @@ void Game::render(){
 void Game::doCollisions(){
     if (isCollision(*this->ball, *this->lPaddle)){
         std::cout << "collision with left paddle" << std::endl;
+        this->ball->velocity.x = abs(this->ball->velocity.x);
+
     }
     else if (isCollision(*this->ball, *this->rPaddle)){
         std::cout << "collision with right paddle" << std::endl;
+        this->ball->velocity.x = -abs(this->ball->velocity.x);
     }
 }  
 
+bool Game::isCollision(Ball &ball, GameObject &paddle){
 
-bool Game::isCollision(GameObject &goa, GameObject &gob){
-
-    bool isXCollision = goa.position.x + goa.size.x >= gob.position.x 
-                    && gob.position.x + gob.size.x >= goa.position.x;
-
-    bool isYCollision = goa.position.y + goa.size.y >= gob.position.y 
-                    && gob.position.y + gob.size.y >= goa.position.y;
-    
-    return isXCollision && isYCollision;
+    glm::vec2 ballCenter(ball.position + ball.radius);
+    glm::vec2 paddleHalfExtents(paddle.size.x / 2.0f, paddle.size.y / 2.0f);
+    glm::vec2 paddleCenter(
+        paddle.position.x + paddleHalfExtents.x
+        , paddle.position.y + paddleHalfExtents.y
+    );
+    glm::vec2 difference = ballCenter - paddleCenter;
+    glm::vec2 clamped = glm::clamp(difference, -paddleHalfExtents, paddleHalfExtents);
+    glm::vec2 closest = paddleCenter + clamped;
+    difference = closest - ballCenter;
+    return glm::length(difference) < ball.radius;
 }
