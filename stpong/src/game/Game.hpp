@@ -20,9 +20,8 @@ const glm::vec2 PADDLE_SIZE(30.0f, 200.0f);
 const float PADDLE_VELOCITY(500.0f);
 const float PADDLE_WALL_DISTANCE(PADDLE_SIZE.x + 5.0f);
 
-const glm::vec2 INITIAL_BALL_VELOCITY(100.0f, -450.0f);
 const float BALL_RADIUS = 12.5f;
-
+const float BALL_VELOCITY_MAGNITUDE = 500;
 
 class Game{
 

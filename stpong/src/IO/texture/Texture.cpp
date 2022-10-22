@@ -52,6 +52,7 @@ Texture Texture::generate(
     this->data = rawTexture.data;
 
     this->imageFormat = getChannels(imgPath);
+    this->internalFormat = this->imageFormat;
 
     if (data){
         glTexImage2D(

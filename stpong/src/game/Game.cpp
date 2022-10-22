@@ -2,6 +2,8 @@
 #include <iostream>
 
 #include "service/resource/ResourceService.hpp"
+#include "service/number/numberService.hpp"
+
 
 Game::Game(unsigned int width, unsigned int height): 
     state(GAME_ACTIVE)
@@ -22,6 +24,7 @@ Game::~Game(){
 
 void Game::init(){
     std::cout << "Game init called" << std::endl;
+    srand(time(0)); 
 
     ResourceService::loadShader(
         "vertex.glsl"
@@ -65,10 +68,12 @@ void Game::init(){
         , this->height / 2.0f
     );
     ResourceService::loadTexture("awesomeface.png", "face");
+
+    const glm::vec2 PADDLE_SIZE(-250.0f, -433.0f);
     this->ball = new Ball(
         ballPos, 
         BALL_RADIUS, 
-        INITIAL_BALL_VELOCITY,
+        getInitialVelocity(BALL_VELOCITY_MAGNITUDE),
         ResourceService::getTexture("face")
     );
 }
