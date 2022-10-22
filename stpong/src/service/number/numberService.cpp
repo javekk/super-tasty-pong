@@ -18,9 +18,6 @@ glm::vec2 getInitialVelocity(int magnitude){
     int _xArea = magnitude / 4;
     int x = getRandomNumber(2*_xArea, 3*_xArea);
     int y = sqrt(pow(magnitude,2) - pow(x,2));
-    x = assignRandomSign(x);
-    y = assignRandomSign(y);
-    std::cout << x << " " << y << std::endl;
-    glm::vec2 velocity(x,y);
+    glm::vec2 velocity(assignRandomSign(x),assignRandomSign(y));
     return velocity;
 }

@@ -80,6 +80,7 @@ void Game::init(){
 
 void Game::update(float deltaTime){
     this->ball->move(deltaTime, this->height);
+    this->doCollisions();
 }
 
 void Game::processInput(float deltaTime){
@@ -124,4 +125,25 @@ void Game::render(){
     this->lPaddle->draw(*this->renderer);
     this->rPaddle->draw(*this->renderer);
     this->ball->draw(*this->renderer);
+}
+
+void Game::doCollisions(){
+    if (isCollision(*this->ball, *this->lPaddle)){
+        std::cout << "collision with left paddle" << std::endl;
+    }
+    else if (isCollision(*this->ball, *this->rPaddle)){
+        std::cout << "collision with right paddle" << std::endl;
+    }
+}  
+
+
+bool Game::isCollision(GameObject &goa, GameObject &gob){
+
+    bool isXCollision = goa.position.x + goa.size.x >= gob.position.x 
+                    && gob.position.x + gob.size.x >= goa.position.x;
+
+    bool isYCollision = goa.position.y + goa.size.y >= gob.position.y 
+                    && gob.position.y + gob.size.y >= goa.position.y;
+    
+    return isXCollision && isYCollision;
 }

@@ -35,16 +35,19 @@ class Game{
 
         void init();
 
-        // Game loop
         void processInput(float deltaTime);
         void update(float deltaTime);
         void render();
+
+        void doCollisions();
     
     private:
         SpriteRenderer *renderer;
         GameObject *lPaddle;
         GameObject *rPaddle;
         Ball *ball;
+
+        bool isCollision(GameObject &goa, GameObject &gob);
 };
 
 #endif
