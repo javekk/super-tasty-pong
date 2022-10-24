@@ -41,6 +41,8 @@ class Game{
         void update(float deltaTime);
         void render();
 
+        void reset();
+
         void doCollisions();
     
     private:

@@ -80,6 +80,12 @@ void Game::init(){
 void Game::update(float deltaTime){
     this->ball->move(deltaTime, this->height);
     this->doCollisions();
+
+    if ((this->ball->position.x + this->ball->radius) <= 0.0f 
+            || this->ball->position.x >= this->width
+    ) {
+        this->reset();
+    }
 }
 
 void Game::processInput(float deltaTime){
@@ -126,6 +132,24 @@ void Game::render(){
     this->ball->draw(*this->renderer);
 }
 
+void Game::reset(){
+
+    glm::vec2 lPaddlePos = glm::vec2(
+        PADDLE_WALL_DISTANCE
+        , this->height / 2.0f - PADDLE_SIZE.y / 2.0f
+    );
+    this->lPaddle->position = lPaddlePos;
+
+    glm::vec2 rPaddlePos = glm::vec2(
+        this->width - PADDLE_WALL_DISTANCE - PADDLE_SIZE.x
+        , this->height / 2.0f - PADDLE_SIZE.y / 2.0f
+    );
+    this->rPaddle->position = rPaddlePos;
+
+    glm::vec2 ballPos = glm::vec2(this-> width / 2.0f, this->height / 2.0f);
+    this->ball->reset(ballPos, getInitialVelocity(BALL_VELOCITY_MAGNITUDE));
+}
+
 void Game::doCollisions(){
     Collision lCollision = checkCollision(*this->ball, *this->lPaddle);
     if (lCollision.isACollision){
@@ -166,3 +190,5 @@ Collision Game::checkCollision(Ball &ball, GameObject &paddle){
     Collision col(glm::length(difference) < ball.radius, difference);
     return col;
 }
+
+
