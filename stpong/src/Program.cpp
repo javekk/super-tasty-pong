@@ -61,13 +61,9 @@ void Program::keyCallback(
     
     this->handleEscButton();
     if (key >= 0 && key < 1024){
-        if (action == GLFW_PRESS){
-            std::cout << "Key press: " << key << std::endl;
+        if (action == GLFW_PRESS)
             this->game.keys[key] = true;
-        }
-        else if (action == GLFW_RELEASE){
-            std::cout << "Key released: " << key << std::endl;
+        else if (action == GLFW_RELEASE)
             this->game.keys[key] = false;
-        }
     }
 }

@@ -21,3 +21,4 @@ glm::vec2 getInitialVelocity(int magnitude){
     glm::vec2 velocity(assignRandomSign(x), assignRandomSign(y));
     return velocity;
 }
+

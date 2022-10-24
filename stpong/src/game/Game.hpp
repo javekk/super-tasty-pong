@@ -8,6 +8,7 @@
 #include "IO/sprite/SpriteRenderer.hpp"
 #include "GameObject.hpp"
 #include "Ball.hpp"
+#include "collision.hpp"
 
 
 enum GameState {
@@ -16,12 +17,13 @@ enum GameState {
     GAME_WIN
 }; 
 
+
 const glm::vec2 PADDLE_SIZE(30.0f, 200.0f);
 const float PADDLE_VELOCITY(500.0f);
 const float PADDLE_WALL_DISTANCE(PADDLE_SIZE.x + 5.0f);
 
 const float BALL_RADIUS = 12.5f;
-const float BALL_VELOCITY_MAGNITUDE = 100;
+const float BALL_VELOCITY_MAGNITUDE = 500;
 
 class Game{
 
@@ -47,7 +49,7 @@ class Game{
         GameObject *rPaddle;
         Ball *ball;
 
-        bool isCollision(Ball &ball, GameObject &paddle);
+        Collision checkCollision(Ball &ball, GameObject &paddle);
 };
 
 #endif

@@ -127,18 +127,31 @@ void Game::render(){
 }
 
 void Game::doCollisions(){
-    if (isCollision(*this->ball, *this->lPaddle)){
-        std::cout << "collision with left paddle" << std::endl;
-        this->ball->velocity.x = abs(this->ball->velocity.x);
-
+    Collision lCollision = checkCollision(*this->ball, *this->lPaddle);
+    if (lCollision.isACollision){
+        float halfPaddleYSize = this->lPaddle->size.y / 2.0f;
+        float lpaddleCenter = this->lPaddle->position.y + halfPaddleYSize;
+        float distance = (this->ball->position.y + this->ball->radius) - lpaddleCenter;
+        float percentage = distance / halfPaddleYSize;
+        float yBoost = percentage * BALL_VELOCITY_MAGNITUDE;
+        float newY = this->ball->velocity.y + yBoost; 
+        float newX = abs(this->ball->velocity.x);
+        this->ball->velocity = glm::normalize(glm::vec2(newX, newY)) * BALL_VELOCITY_MAGNITUDE;
     }
-    else if (isCollision(*this->ball, *this->rPaddle)){
-        std::cout << "collision with right paddle" << std::endl;
-        this->ball->velocity.x = -abs(this->ball->velocity.x);
+
+    Collision rCollision = checkCollision(*this->ball, *this->rPaddle);
+    if (rCollision.isACollision){
+        float rpaddleCenter = this->rPaddle->position.y + (this->rPaddle->size.y / 2.0f);
+        float distance = (this->ball->position.y + this->ball->radius) - rpaddleCenter;
+        float percentage = distance / (this->rPaddle->size.y / 2.0f);
+        float yBoost = percentage * BALL_VELOCITY_MAGNITUDE;
+        float newY = this->ball->velocity.y + yBoost; 
+        float newX = -abs(this->ball->velocity.x);
+        this->ball->velocity = glm::normalize(glm::vec2(newX, newY)) * BALL_VELOCITY_MAGNITUDE;
     }
 }  
 
-bool Game::isCollision(Ball &ball, GameObject &paddle){
+Collision Game::checkCollision(Ball &ball, GameObject &paddle){
 
     glm::vec2 ballCenter(ball.position + ball.radius);
     glm::vec2 paddleHalfExtents(paddle.size.x / 2.0f, paddle.size.y / 2.0f);
@@ -150,5 +163,6 @@ bool Game::isCollision(Ball &ball, GameObject &paddle){
     glm::vec2 clamped = glm::clamp(difference, -paddleHalfExtents, paddleHalfExtents);
     glm::vec2 closest = paddleCenter + clamped;
     difference = closest - ballCenter;
-    return glm::length(difference) < ball.radius;
+    Collision col(glm::length(difference) < ball.radius, difference);
+    return col;
 }
