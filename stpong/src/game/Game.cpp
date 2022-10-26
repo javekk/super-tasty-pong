@@ -11,7 +11,6 @@ Game::Game(unsigned int width, unsigned int height):
     , width(width)
     , height(height)
 {
-
     std::cout << "Game constructor called:"
         << " Width: " << this->width 
         << " Height: " << this->height
@@ -25,13 +24,7 @@ Game::~Game(){
 void Game::init(){
     std::cout << "Game init called" << std::endl;
     srand(time(0)); 
-
-    ResourceService::loadShader(
-        "vertex.glsl"
-        , "fragment.glsl"
-        , nullptr
-        , "sprite"
-    );
+    
     glm::mat4 projection = glm::ortho(
         0.0f
         , static_cast<float>(this->width)
@@ -41,14 +34,31 @@ void Game::init(){
         , 1.0f
     );
 
+    ResourceService::loadShader(
+        "spriteVert.glsl"
+        , "spriteFrag.glsl"
+        , nullptr
+        , "sprite"
+    );
+    ResourceService::loadShader(
+        "particleVert.glsl"
+        , "particleFrag.glsl"
+        , nullptr
+        , "particle"
+    );
+
     ResourceService::getShader("sprite").use().setInt("image", 0);
     ResourceService::getShader("sprite").setMatrix4("projection", projection);
-    Shader shader = ResourceService::getShader("sprite");
-    renderer = new SpriteRenderer(shader);
+    ResourceService::getShader("particle").use().setInt("image", 0);
+    ResourceService::getShader("particle").setMatrix4("projection", projection);
+    Shader spriteshader = ResourceService::getShader("sprite");
+    renderer = new SpriteRenderer(spriteshader);
 
     ResourceService::loadTexture("background.jpg", "background");
     ResourceService::loadTexture("paddle_1.jpg", "rPaddle");
     ResourceService::loadTexture("paddle_2.jpg", "lPaddle");
+    ResourceService::loadTexture("particle.png", "particle"); 
+
     Texture rPaddleTexture = ResourceService::getTexture("rPaddle");
     Texture lPaddleTexture = ResourceService::getTexture("lPaddle");
 
@@ -75,11 +85,23 @@ void Game::init(){
         getInitialVelocity(BALL_VELOCITY_MAGNITUDE),
         ResourceService::getTexture("face")
     );
+
+    this->particleGenerator = new ParticleGenerator(
+        ResourceService::getShader("particle"), 
+        ResourceService::getTexture("particle"), 
+        2000
+    );
 }
 
 void Game::update(float deltaTime){
     this->ball->move(deltaTime, this->height);
     this->doCollisions();
+    this->particleGenerator->update(
+        deltaTime
+        , *this->ball
+        , 20
+        , glm::vec2(this->ball->radius / 2.0f)
+    );
 
     if ((this->ball->position.x + this->ball->radius) <= 0.0f 
             || this->ball->position.x >= this->width
@@ -129,6 +151,7 @@ void Game::render(){
 
     this->lPaddle->draw(*this->renderer);
     this->rPaddle->draw(*this->renderer);
+    this->particleGenerator->draw();
     this->ball->draw(*this->renderer);
 }
 
@@ -165,9 +188,10 @@ void Game::doCollisions(){
 
     Collision rCollision = checkCollision(*this->ball, *this->rPaddle);
     if (rCollision.isACollision){
-        float rpaddleCenter = this->rPaddle->position.y + (this->rPaddle->size.y / 2.0f);
+        float halfPaddleYSize = this->lPaddle->size.y / 2.0f;
+        float rpaddleCenter = this->rPaddle->position.y + halfPaddleYSize;
         float distance = (this->ball->position.y + this->ball->radius) - rpaddleCenter;
-        float percentage = distance / (this->rPaddle->size.y / 2.0f);
+        float percentage = distance / halfPaddleYSize;
         float yBoost = percentage * BALL_VELOCITY_MAGNITUDE;
         float newY = this->ball->velocity.y + yBoost; 
         float newX = -abs(this->ball->velocity.x);

@@ -15,7 +15,7 @@ void SpriteRenderer::initRenderData(){
     
     unsigned int VBO;
     float vertices[] = { 
-        // pos          // tex
+        // position     // texture
         0.0f, 1.0f,     0.0f, 1.0f,
         1.0f, 0.0f,     1.0f, 0.0f,
         0.0f, 0.0f,     0.0f, 0.0f, 
@@ -24,7 +24,6 @@ void SpriteRenderer::initRenderData(){
         1.0f, 1.0f,     1.0f, 1.0f,
         1.0f, 0.0f,     1.0f, 0.0f
     };
-
     glGenVertexArrays(1, &this->VAO);
     glGenBuffers(1, &VBO);
     

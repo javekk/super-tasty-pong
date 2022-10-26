@@ -4,8 +4,8 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-
 #include "IO/sprite/SpriteRenderer.hpp"
+#include "IO/particle/ParticleGenerator.hpp"
 #include "GameObject.hpp"
 #include "Ball.hpp"
 #include "collision.hpp"
@@ -50,6 +50,8 @@ class Game{
         GameObject *lPaddle;
         GameObject *rPaddle;
         Ball *ball;
+
+        ParticleGenerator *particleGenerator;
 
         Collision checkCollision(Ball &ball, GameObject &paddle);
 };
